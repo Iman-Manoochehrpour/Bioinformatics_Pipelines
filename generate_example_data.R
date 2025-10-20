@@ -2,7 +2,7 @@
 # 🧬 generate_example_data.R
 # Author: Iman Manoochehrpour
 # Project: Bioinformatics_Pipelines
-# Purpose: Generate synthetic example datasets for demonstration
+# Purpose: Generate realistic synthetic example datasets for demonstration
 ############################################################
 
 # ---- Create folder if it doesn't exist ----
@@ -48,12 +48,23 @@ message("✅ sample_metadata.csv created successfully.")
 ############################################################
 # 3️⃣ Gene annotation (Symbol, Biotype)
 ############################################################
-gene_symbol <- paste0("MIR", sample(1000:9999, 100))
+# Assign realistic biotypes
 biotype <- sample(c("protein_coding", "lncRNA", "miRNA"), 100, replace = TRUE)
+
+# Generate more realistic gene symbols based on type
+generate_symbol <- function(type) {
+  switch(type,
+         "protein_coding" = paste0(sample(LETTERS, 1), sample(100:999, 1)),
+         "lncRNA" = paste0("LNC", sample(1000:9999, 1)),
+         "miRNA" = paste0("MIR", sample(1:9999, 1)),
+         "GENE")
+}
+
+symbols <- sapply(biotype, generate_symbol)
 
 annotation <- data.frame(
   GeneID = genes,
-  Symbol = gene_symbol,
+  Symbol = symbols,
   Biotype = biotype
 )
 
